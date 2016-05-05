@@ -27,12 +27,9 @@ public class App implements CommandLineRunner{
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", 1);
 		
 		Customer result = jdbcTemplate.queryForObject(sql,param,
-				new RowMapper<Customer>() {
-			public Customer mapRow(ResultSet rs,int rowNum) throws SQLException {
-				return new Customer(rs.getInt("id"), rs.getString("first_name"),rs.getString("last_name"));
-	
-			}
-		});
+				(rs, rowNum) -> new Customer(rs.getInt("id"),
+				rs.getString("first_name"), rs.getString("last_name"))
+		);
 		
 		System.out.println("result = "+result);
 		
