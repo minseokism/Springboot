@@ -21,7 +21,7 @@ public class App implements CommandLineRunner{
 		Customer created = customerRepository.save(new Customer(
 				null, "Minseok", "Lee"));		
 		System.out.println(created + " is created");
-		customerRepository.findAll()
+		customerRepository.findAllOrderByName()
 				.forEach(System.out::println);
 	}
 	
