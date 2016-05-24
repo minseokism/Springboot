@@ -10,7 +10,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
@@ -60,4 +63,15 @@ public class AppConfig {
         result.setConfiguration(factory.createConfiguration());
         return result;
     }
+    
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Bean
+    CharacterEncodingFilter characterEncodingFilter() {
+    	CharacterEncodingFilter filter = new CharacterEncodingFilter();
+    	filter.setEncoding("UTF-8");
+    	filter.setForceEncoding(true);
+    	return filter;
+    }
+    
+    
 }
