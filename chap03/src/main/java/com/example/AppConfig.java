@@ -1,6 +1,6 @@
 package com.example;
 
-import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.sql.DataSource;
 
@@ -12,13 +12,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
-import freemarker.template.TemplateException;
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
 
 @Configuration
@@ -43,27 +40,12 @@ public class AppConfig {
 	DataSource dataSource() {
 		return new Log4jdbcProxyDataSource(this.dataSource);
 	}
-	
-    @Bean
-    public ViewResolver viewResolver() {
-        FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
-        resolver.setCache(true);
-        resolver.setPrefix("");
-        resolver.setSuffix(".ftl");
-        resolver.setContentType("text/html; charset=UTF-8");
-        return resolver;
-    }
-
-    @Bean
-    public FreeMarkerConfigurer freemarkerConfig() throws IOException, TemplateException {
-        FreeMarkerConfigurationFactory factory = new FreeMarkerConfigurationFactory();
-        factory.setTemplateLoaderPaths("classpath:templates", "src/main/resource/templates");
-        factory.setDefaultEncoding("UTF-8");
-        FreeMarkerConfigurer result = new FreeMarkerConfigurer();
-        result.setConfiguration(factory.createConfiguration());
-        return result;
-    }
     
+    @Bean
+    public HttpMessageConverter<String> responseBodyConverter() {
+        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+    }
+	
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @Bean
     CharacterEncodingFilter characterEncodingFilter() {
@@ -72,6 +54,5 @@ public class AppConfig {
     	filter.setForceEncoding(true);
     	return filter;
     }
-    
-    
+
 }

@@ -41,7 +41,7 @@ public class CustomerController {
 		Customer customer = new Customer();
 		BeanUtils.copyProperties(form, customer);
 		customerService.create(customer);
-		return "redirect/customers";
+		return "redirect:/customers";
 	}
 
 }
