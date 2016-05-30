@@ -68,5 +68,11 @@ public class CustomerController {
 	String goToTop() {
 		return "redirect:/customers";
 	}
+	
+	@RequestMapping(value = "delete", method = RequestMethod.POST)
+	String edit(@RequestParam Integer id) {
+		customerService.delete(id);
+		return "redirect:/customers";
+	}
 
 }
