@@ -7,14 +7,14 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.web.HttpEncodingProperties;
+import org.springframework.boot.context.web.OrderedCharacterEncodingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
 
@@ -23,6 +23,7 @@ public class AppConfig {
 	@Autowired	
 	DataSourceProperties dataSourceProperties;
 	DataSource dataSource;
+	HttpEncodingProperties httpEncodingProperties;
 	
 	@Bean
 	DataSource realDataSource(){
@@ -42,17 +43,18 @@ public class AppConfig {
 	}
     
     @Bean
-    public HttpMessageConverter<String> responseBodyConverter() {
+    HttpMessageConverter<String> responseBodyConverter() {
         return new StringHttpMessageConverter(Charset.forName("UTF-8"));
     }
 	
-    @Order(Ordered.HIGHEST_PRECEDENCE)
+ 
     @Bean
-    CharacterEncodingFilter characterEncodingFilter() {
-    	CharacterEncodingFilter filter = new CharacterEncodingFilter();
-    	filter.setEncoding("UTF-8");
-    	filter.setForceEncoding(true);
-    	return filter;
+    public OrderedCharacterEncodingFilter characterEncodingFilter() {
+        OrderedCharacterEncodingFilter filter = new OrderedCharacterEncodingFilter();
+        filter.setEncoding(this.httpEncodingProperties.getCharset().name());
+        filter.setForceEncoding(this.httpEncodingProperties.isForce());
+        filter.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return filter;
     }
 
 }
