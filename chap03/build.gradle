@@ -27,6 +27,7 @@ repositories {
 
 
 dependencies {
+	compile('org.flywaydb:flyway-core')
 	compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.2')
 	compile('org.webjars.bower:boot:3.3.6')
 	compile('org.lazyluke:log4jdbc-remix:0.2.7')
