@@ -13,4 +13,8 @@ public class LoginUserDetails extends
 			AuthorityUtils.createAuthorityList("ROLE_USER"));
 			this.user = user;
 	}
+	
+	public User getUser(){
+		return user;
+	}
 }
